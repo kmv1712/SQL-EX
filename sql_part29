@@ -1,3 +1,19 @@
+----------------------------------------------Solution--------------------------------------------------------
+SELECT 
+IIF(a.point IS NULL, b.point, a.point),
+IIF(a.date IS NULL, b.date, a.date),
+IIF(a.point = b.point or b.point IS NULL or inc is NOT NULL, inc, NULL),
+IIF(a.point = b.point or a.point IS NULL, out, NULL) 
+FROM 
+(SELECT *
+FROM Income_o) a
+full join
+(SELECT *
+FROM Outcome_o) b
+on a.point = b.point and a.date = b.date
+_______________________________________________________________________________________________________________
+
+----------------------------------------------Solution but not correct------------------------------------------
 with one(point, date, inc, out) as (SELECT 
 IIF(a.point IS NULL, b.point, a.point),
 IIF(a.date IS NULL, b.date, a.date),
@@ -18,28 +34,3 @@ order by point, date
 ____________________________________________________________________
 
 
-with one(point, date, inc, out) as (SELECT point, date, inc, NULL
-FROM Income_o a 
-UNION ALL
-SELECT point, date, NULL, out
-FROM Outcome_o b)
-
-(SELECT  date
-FROM one
-where point = 1
-GROUP BY date) q
-inner join one on q.date = one.date
-
-
-
-
-SELECT date
-FROM one
-where point = 2
-GROUP BY date
-UNION ALL
-
-SELECT  date
-FROM one
-where point = 3
-GROUP BY date
