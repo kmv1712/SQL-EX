@@ -1,0 +1,15 @@
+with one (point, date) as (SELECT DISTINCT
+IIF (a.point = b.point, a.point,
+IIF (a.point is NULL, b.point, a.point)),
+IIF (a.date = b.date, a.date,
+IIF (a.date is NULL, b.date, a.date))
+FROM
+(SELECT *
+FROM Income) a
+full join 
+(SELECT *
+FROM Outcome) b
+on a.date = b.date)
+
+SELECT *
+FROM one
