@@ -1,15 +1,15 @@
-with one (point, date) as (SELECT DISTINCT
-IIF (a.point = b.point, a.point,
-IIF (a.point is NULL, b.point, a.point)),
-IIF (a.date = b.date, a.date,
-IIF (a.date is NULL, b.date, a.date))
-FROM
-(SELECT *
-FROM Income) a
-full join 
-(SELECT *
-FROM Outcome) b
-on a.date = b.date)
+SELECT 
+IIF(a.point IS NULL, b.point, a.point) as point,
+IIF(a.date IS NULL, b.date, a.date) as date,
+IIF(a.point IS NULL or out is NOT NULL, out, NULL) as Outcome ,
+IIF(b.point IS NULL or inc is NOT NULL, inc, NULL) as Income
 
-SELECT *
-FROM one
+FROM
+(SELECT point, date, SUM (out) as out
+FROM Outcome 
+GROUP BY point, date) a
+full join 
+(SELECT point, date, SUM (inc) as inc
+FROM Income
+GROUP BY point, date) b
+on a.date = b.date and a.point = b.point
