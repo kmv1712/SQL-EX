@@ -1,0 +1,20 @@
+<Разобраться почему неверно?>
+with one(date, result, aship, bdate, bresult, bship) as (SELECT a.date, a.result, a.ship, b.date, b.result, b.ship
+FROM
+(SELECT battles.date, Outcomes.ship, Outcomes.battle,	Outcomes.result
+FROM Battles 
+inner join
+Outcomes
+on battles.name = Outcomes.battle
+where Outcomes.result = 'damaged') as a
+inner join
+(SELECT battles.date, Outcomes.ship, Outcomes.battle,	Outcomes.result
+FROM Battles 
+inner join
+Outcomes
+on battles.name = Outcomes.battle
+where Outcomes.result = 'ok') as b
+on a.ship = b.ship)
+
+SELECT IIF (date < bdate and result = 'damaged' and bresult = 'ok', bship, NULL) 
+FROM one
