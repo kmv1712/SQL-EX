@@ -11,3 +11,15 @@ UNPIVOT (
 value FOR col IN (ram, speed)
 ) AS unpvt
 ----------------------------------------
+
+-------Проблема с NULL-------
+WITH one (cd, hd, model, price, ram, speed) AS
+(SELECT CAST(COALESCE(cd, -1) as char(6)), CAST(COALESCE(hd, -1) as char(6)), CAST(COALESCE(model, -1) as char(6)),  CAST(COALESCE(price, -1) as char(6)), CAST(COALESCE(ram, -1) as char(6)),  CAST(COALESCE(speed, -1) as char(6))
+FROM PC
+where code = (SELECT MAX(code) FROM PC))
+
+
+SELECT col, NULLIF(value, -1 ) FROM one
+UNPIVOT (
+value FOR col IN (cd, hd, model, price, ram, speed)
+) AS unpvt
