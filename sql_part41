@@ -1,0 +1,13 @@
+-------Проблема с типами подумать-------
+
+WITH one (cd, hd, model, ram, speed) AS
+(SELECT CAST(cd as char(3)), CAST(hd as char(2)), CAST(model as char(4)),  CAST(ram as char(3)),  CAST(speed as char(3))
+FROM PC
+where code = (SELECT MAX(code) FROM PC))
+
+
+SELECT col, value FROM one
+UNPIVOT (
+value FOR col IN (ram, speed)
+) AS unpvt
+----------------------------------------
