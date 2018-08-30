@@ -1,25 +1,20 @@
-Ваш запрос вернул правильные данные на основной базе, но не прошел тест на проверочной базе.
-* Неверное число записей (меньше на 4)
-На эту задачу есть FAQ
+-------------------Solution---------------
 
+with one (ship, class, battle ) as (SELECT b.ship, 
+IIF (a.class is NULL, b.ship, a.class),
+b.battle
+FROM Ships a
+right join
+Outcomes b
+on b.ship = a.name)
 
-with one(ship, class, battle) as (SELECT IIF (a.name is NULL, b.ship, a.name ) as ship,
-class,
-battle
-FROM
-(SELECT *
-FROM Ships) as a
-full join
-(SELECT * FROM Outcomes) as b
-on a.name = b.ship
-)
-
-SELECT DISTINCT g.ship, h.displacement,	h.numGuns
+SELECT DISTINCT g.ship, h.displacement, h.numGuns
 FROM
 (SELECT *
 FROM one
-where battle = 'Guadalcanal') as g
-inner join
-(SELECT *
-FROM Classes) as h
+) as g
+full join 
+classes h
 on g.class = h.class
+where g.battle = 'Guadalcanal'
+-------------------------------------------
